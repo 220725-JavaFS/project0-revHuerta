@@ -1,28 +1,37 @@
-package com.revature.repos;
+package com.revature.models;
 
-public class User {
+public class Account {
 	
 	private String name;
+	private String lastName;
 	private String userEmail;
 	private String userName;
 	private String userPwd;
-	private String userRole;
 	private int userLevel;
 	private double userCurrency;
 	private boolean isUserBanned;
 	
-	public User() {
+	public Account() {
 		super();
 	}
 	
-	public User(String name, String userEmail, String userName, String userPwd, String userRole, int userLevel,
-			double userCurrency, boolean isUserBanned) {
+	public Account(String name, String lastName, String userEmail, String userName, String userPwd) {
 		super();
 		this.name = name;
+		this.lastName = lastName;
 		this.userEmail = userEmail;
 		this.userName = userName;
 		this.userPwd = userPwd;
-		this.userRole = userRole;
+	}
+
+	public Account(String name, String lastName, String userEmail, String userName, String userPwd, int userLevel,
+			double userCurrency, boolean isUserBanned) {
+		super();
+		this.name = name;
+		this.lastName = lastName;
+		this.userEmail = userEmail;
+		this.userName = userName;
+		this.userPwd = userPwd;
 		this.userLevel = userLevel;
 		this.userCurrency = userCurrency;
 		this.isUserBanned = isUserBanned;
@@ -34,6 +43,14 @@ public class User {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public String getUserEmail() {
@@ -60,14 +77,6 @@ public class User {
 		this.userPwd = userPwd;
 	}
 
-	public String getUserRole() {
-		return userRole;
-	}
-
-	public void setUserRole(String userRole) {
-		this.userRole = userRole;
-	}
-
 	public int getUserLevel() {
 		return userLevel;
 	}
@@ -91,6 +100,8 @@ public class User {
 	public void setUserBanned(boolean isUserBanned) {
 		this.isUserBanned = isUserBanned;
 	}
+
+
 	
 	
 }
