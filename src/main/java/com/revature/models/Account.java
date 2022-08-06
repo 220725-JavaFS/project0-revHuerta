@@ -15,6 +15,13 @@ public class Account {
 		super();
 	}
 	
+	public Account(String userEmail, String userName, String userPwd) {
+		super();
+		this.userEmail = userEmail;
+		this.userName = userName;
+		this.userPwd = userPwd;
+	}
+
 	public Account(String name, String lastName, String userEmail, String userName, String userPwd) {
 		super();
 		this.name = name;
@@ -99,6 +106,13 @@ public class Account {
 
 	public void setUserBanned(boolean isUserBanned) {
 		this.isUserBanned = isUserBanned;
+	}
+
+	@Override
+	public String toString() {
+		return "Account [name=" + name + ", lastName=" + lastName + ", userEmail=" + userEmail + ", userName="
+				+ userName + ", userPwd=" + userPwd + ", userLevel=" + userLevel + ", userCurrency=" + userCurrency
+				+ ", isUserBanned=" + isUserBanned + "]";
 	}
 
 

@@ -3,29 +3,31 @@ package com.revature.controller;
 import java.util.Scanner;
 
 import com.revature.models.Account;
+import com.revature.services.NewAccountService;
 
 public class RegisterAccount {
 	
 	private Scanner scanner = new Scanner(System.in);
-	
+	private NewAccountService accountService = new NewAccountService();
 	public void register() {
 		
 		
 		
 		System.out.println("\n------------------//------------------");
 		
+		Account account = new Account();
 		
 		System.out.println("Name: ");
-		String name = scanner.nextLine();
+		account.setName(scanner.nextLine());
 		
 		System.out.println("Last Name: ");
-		String lastName = scanner.nextLine();
+		account.setLastName(scanner.nextLine());
 		
 		System.out.println("Email: ");
-		String email = scanner.nextLine();
+		account.setUserEmail(scanner.nextLine());
 		
 		System.out.println("UserName: ");
-		String userName = scanner.nextLine();
+		account.setUserName(scanner.nextLine());
 		
 		System.out.println("Password:");
 		String pwd = scanner.nextLine();
@@ -34,6 +36,8 @@ public class RegisterAccount {
 		
 		while(!pwd.equals(pwd2)) {
 			
+			System.out.println("\n------------------//------------------");
+			System.out.println("Passwords do not mach. Please Try again");
 			System.out.println("Password:");
 			String pwdTemp = scanner.nextLine();
 			System.out.println("Retype Password");
@@ -41,15 +45,16 @@ public class RegisterAccount {
 			
 			if(pwdTemp.equals(pwdTemp2)) {
 				pwd = pwdTemp;
+
 				break;
 			}
 			
 		}
 		
-		System.out.println("Welcome" + name + " User " + userName + "pwd:" + pwd);
-		Account account = new Account(name, lastName, email, userName, pwd);
-		
-		
+		account.setUserPwd(pwd);
+		accountService.newAccount(account);
+
+		System.out.println("...Signed up!\n");
 
 
 		

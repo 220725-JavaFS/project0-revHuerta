@@ -14,8 +14,8 @@ Possible examples include:
   *	Java 8
     * Scanner (Console inputs)
     * JDBC (Database Connectivity)
-    * JUnit (Unit Testing)
-    * Logback (Logging)
+    * 
+    * 
   * PostgreSQL
   * Maven (Dependency Management)
 *	Functionalities: 

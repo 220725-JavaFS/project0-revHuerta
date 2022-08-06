@@ -1,16 +1,17 @@
 package com.revature.services;
 
+import com.revature.daos.AccountDAO;
+import com.revature.daos.AccountDAOImpl;
 import com.revature.models.Account;
 
 public class NewAccountService {
 	
-	private Account account = new Account();
+	private AccountDAO accountDao = new AccountDAOImpl();
+	
 	public void newAccount(Account user) {
 		
-		user.setName(user.getLastName());
-		
-		
-		
+		accountDao.storeAccount(user);
+
 	}
 
 }

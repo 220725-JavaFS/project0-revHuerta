@@ -1,4 +1,4 @@
-package com.revature.runner;
+package com.revature;
 
 import com.revature.controller.Menu;
 
