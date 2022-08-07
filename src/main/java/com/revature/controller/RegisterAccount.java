@@ -3,12 +3,12 @@ package com.revature.controller;
 import java.util.Scanner;
 
 import com.revature.models.Account;
-import com.revature.services.NewAccountService;
+import com.revature.services.AccountService;
 
 public class RegisterAccount {
 	
 	private Scanner scanner = new Scanner(System.in);
-	private NewAccountService accountService = new NewAccountService();
+	private AccountService accountService = new AccountService();
 	public void register() {
 		
 		

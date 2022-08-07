@@ -13,7 +13,7 @@ public class Admin extends Account{
 	
 	public Admin(String name, String lastName, String userEmail, String userName, String userPwd, int userLevel,
 			double userCurrency, boolean isUserBanned, String role, boolean isAdmin) {
-		super(name, lastName, userEmail, userName, userPwd, userLevel, userCurrency, isUserBanned);
+		super();
 		this.role = role;
 		this.isAdmin = isAdmin;
 	}

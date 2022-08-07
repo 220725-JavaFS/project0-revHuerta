@@ -10,6 +10,8 @@ public class Account {
 	private int userLevel;
 	private double userCurrency;
 	private boolean isUserBanned;
+	private boolean isOwner;
+	private boolean isAdmin;
 	
 	public Account() {
 		super();
@@ -31,17 +33,18 @@ public class Account {
 		this.userPwd = userPwd;
 	}
 
-	public Account(String name, String lastName, String userEmail, String userName, String userPwd, int userLevel,
-			double userCurrency, boolean isUserBanned) {
+	public Account(String name, String lastName, String userEmail, String userName, int userLevel, double userCurrency,
+			boolean isUserBanned, boolean isOwner, boolean isAdmin) {
 		super();
 		this.name = name;
 		this.lastName = lastName;
 		this.userEmail = userEmail;
 		this.userName = userName;
-		this.userPwd = userPwd;
 		this.userLevel = userLevel;
 		this.userCurrency = userCurrency;
 		this.isUserBanned = isUserBanned;
+		this.isOwner = isOwner;
+		this.isAdmin = isAdmin;
 	}
 
 	public String getName() {
@@ -108,11 +111,27 @@ public class Account {
 		this.isUserBanned = isUserBanned;
 	}
 
+	public boolean isOwner() {
+		return isOwner;
+	}
+
+	public void setOwner(boolean isOwner) {
+		this.isOwner = isOwner;
+	}
+
+	public boolean isAdmin() {
+		return isAdmin;
+	}
+
+	public void setAdmin(boolean isAdmin) {
+		this.isAdmin = isAdmin;
+	}
+
 	@Override
 	public String toString() {
 		return "Account [name=" + name + ", lastName=" + lastName + ", userEmail=" + userEmail + ", userName="
-				+ userName + ", userPwd=" + userPwd + ", userLevel=" + userLevel + ", userCurrency=" + userCurrency
-				+ ", isUserBanned=" + isUserBanned + "]";
+				+ userName + ", userLevel=" + userLevel + ", userCurrency=" + userCurrency
+				+ ", isUserBanned=" + isUserBanned + ", isOwner=" + isOwner + ", isAdmin=" + isAdmin + "]";
 	}
 
 

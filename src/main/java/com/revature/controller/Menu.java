@@ -2,6 +2,8 @@ package com.revature.controller;
 
 import java.util.Scanner;
 
+import com.revature.services.AccountService;
+
 public class Menu {
 	
 	private Scanner scanner = new Scanner(System.in);
@@ -36,6 +38,8 @@ public class Menu {
 				
 				case 1:
 					System.out.println("Entered 1");
+					logIn();
+					//menu();
 					break;
 					
 				case 2:
@@ -108,6 +112,40 @@ public class Menu {
 			
 		}
 		
+	}
+	
+	public void logIn() {
+
+		System.out.println("\n------------------//------------------");
+		AccountService accountService = new AccountService();
+		int count = 0;
+		while(count !=3) {
+
+			System.out.println("Username: ");
+			String userName = scanner.nextLine();
+			System.out.println("Password: ");
+			String userPwd= scanner.nextLine();
+			if(accountService.User(userName) != null && accountService.isUserRegistered( userName, userPwd) !=false ){
+					signedInMenu(userName);
+					break;
+			}
+			
+			System.out.println("User or Password was incorrect...");
+			count++;
+			if(count == 3) {
+				System.out.println("\n------------------//------------------");
+				System.out.println("Heading to Main Menu...");
+				
+			}
+
+		}
+		menu();
+
+	}
+	
+	public void signedInMenu(String user) {
+		
+		System.out.println("Welcome: " + user);
 	}
 	
 

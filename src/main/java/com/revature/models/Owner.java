@@ -14,7 +14,7 @@ public class Owner extends Account {
 	public Owner(String name, String lastName, String userEmail, String userName, String userPwd, int userLevel,
 			double userCurrency, boolean isUserBanned, String farmName, int farmLevel, boolean isOwner,
 			boolean isAdmin) {
-		super(name, lastName, userEmail, userName, userPwd, userLevel, userCurrency, isUserBanned);
+		super();
 		this.farmName = farmName;
 		this.farmLevel = farmLevel;
 		this.isOwner = isOwner;

@@ -10,7 +10,7 @@ public class ConnectionUtil {
 
 	public static Connection getConnection() throws SQLException {
 			
-		if(connection!=null) {
+		if(connection!=null && !connection.isClosed()) {
 			return connection;
 		}else {
 			
@@ -38,5 +38,5 @@ public class ConnectionUtil {
 //			e.printStackTrace();
 //		}
 //	}
-//	
+	
 }
