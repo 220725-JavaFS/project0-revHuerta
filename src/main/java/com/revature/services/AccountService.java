@@ -25,5 +25,13 @@ public class AccountService {
 	public boolean isUserRegistered(String user, String pwd) {
 		return accountDao.getIsUserRegistered(user, pwd);
 	}
+	
+	public boolean isOwner(String user) {
+		return accountDao.getIsOwner(user);
+	}
+	
+	public boolean isAdmin(String user) {
+		return accountDao.getIsAdmin(user);
+	}
 
 }

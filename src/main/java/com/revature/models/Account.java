@@ -12,6 +12,7 @@ public class Account {
 	private boolean isUserBanned;
 	private boolean isOwner;
 	private boolean isAdmin;
+	private String farmName;
 	
 	public Account() {
 		super();
@@ -45,6 +46,21 @@ public class Account {
 		this.isUserBanned = isUserBanned;
 		this.isOwner = isOwner;
 		this.isAdmin = isAdmin;
+	}
+
+	public Account(String name, String lastName, String userEmail, String userName, int userLevel,
+			double userCurrency, boolean isUserBanned, boolean isOwner, boolean isAdmin, String farmName) {
+		super();
+		this.name = name;
+		this.lastName = lastName;
+		this.userEmail = userEmail;
+		this.userName = userName;
+		this.userLevel = userLevel;
+		this.userCurrency = userCurrency;
+		this.isUserBanned = isUserBanned;
+		this.isOwner = isOwner;
+		this.isAdmin = isAdmin;
+		this.farmName = farmName;
 	}
 
 	public String getName() {
@@ -125,6 +141,14 @@ public class Account {
 
 	public void setAdmin(boolean isAdmin) {
 		this.isAdmin = isAdmin;
+	}
+
+	public String getFarmName() {
+		return farmName;
+	}
+
+	public void setFarmName(String farmName) {
+		this.farmName = farmName;
 	}
 
 	@Override

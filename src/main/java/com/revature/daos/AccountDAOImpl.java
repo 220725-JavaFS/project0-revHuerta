@@ -80,7 +80,8 @@ public class AccountDAOImpl implements AccountDAO {
 							result.getDouble("user_currency"),
 							result.getBoolean("is_banned"),
 							result.getBoolean("is_Owner"),
-							result.getBoolean("is_Admin")
+							result.getBoolean("is_Admin"),
+							result.getString("farm_name")
 						);
 				return account;
 			}
@@ -149,19 +150,67 @@ public class AccountDAOImpl implements AccountDAO {
 		}
 		return false;
 	}
-	
-	public static void main(String[] args) {
-		AccountService gas = new AccountService();
-		
-		Account a = gas.User("admin");
-		System.out.println(a.getUserEmail());
-		
-		List<Account> list = gas.AllUsers();
-		System.out.println(list);
-		
-		boolean b = gas.isUserRegistered("t1", "321");
-		System.out.println(b);
-		
+
+	@Override
+	public boolean getIsOwner(String user) {
+		try(Connection connect = ConnectionUtil.getConnection()){
+			
+			String sql = "SELECT * FROM account WHERE user_name = " + "'" + user + "'" + " AND is_owner = true;";
+
+			Statement statement = connect.createStatement();
+			ResultSet result = statement.executeQuery(sql);
+			
+			if(result.next()) {
+				return true;
+			}
+			
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		return false;
 	}
+
+	@Override
+	public boolean getIsAdmin(String user) {
+		try(Connection connect = ConnectionUtil.getConnection()){
+			
+			String sql = "SELECT * FROM account WHERE user_name = " + "'" + user + "'" + " AND is_admin = true;";
+
+			Statement statement = connect.createStatement();
+			ResultSet result = statement.executeQuery(sql);
+			
+			if(result.next()) {
+				return true;
+			}
+			
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+//	public static void main(String[] args) {
+//		AccountService gas = new AccountService();
+//		
+//		Account a = gas.User("admin");
+//		System.out.println(a.getUserEmail());
+//		
+//		List<Account> list = gas.AllUsers();
+//		for(Account b:list) {
+//			System.out.println(b);	
+//		}
+//		
+//		
+//		boolean b = gas.isUserRegistered("t1", "321");
+//		System.out.println(b);
+//		
+//		boolean c = gas.isOwner("admin");
+//		System.out.println(c);
+//		
+//		boolean d = gas.isAdmin("admin");
+//		System.out.println(d);
+//	}
 
 }

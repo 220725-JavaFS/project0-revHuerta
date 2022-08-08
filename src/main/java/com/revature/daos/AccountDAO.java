@@ -10,7 +10,11 @@ public interface AccountDAO {
 	
 	public abstract Account getAccountByUser(String user);
 	
-	 List<Account> getAllUsers();
+	List<Account> getAllUsers();
 
 	public abstract boolean getIsUserRegistered(String user, String pwd);
+
+	public abstract boolean getIsOwner(String user);
+
+	public abstract boolean getIsAdmin(String user);
 }
