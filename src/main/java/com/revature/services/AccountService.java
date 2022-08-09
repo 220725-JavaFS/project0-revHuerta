@@ -45,5 +45,9 @@ public class AccountService {
 	public double netFarmNetWorth(String farmName) {
 		return accountDao.getFarmNetWorth(farmName);
 	}
+	
+	public void updateUserCurrency(String userName, double currency) {
+		accountDao.updateUserCurrency(userName, currency);
+	}
 
 }

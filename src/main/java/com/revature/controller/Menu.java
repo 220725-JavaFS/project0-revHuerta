@@ -5,8 +5,10 @@ import java.util.Scanner;
 
 import com.revature.models.Account;
 import com.revature.models.Farm;
+import com.revature.models.Market;
 import com.revature.services.AccountService;
 import com.revature.services.FarmService;
+import com.revature.services.MarketService;
 
 public class Menu {
 	
@@ -245,6 +247,9 @@ public class Menu {
 				}
 				signedInUser(userName);
 				break;
+			case 7:
+				menu();
+				break;
 				
 			default:
 				System.out.println("------------------//------------------");
@@ -257,25 +262,42 @@ public class Menu {
 	}
 
 	private void signedInOwner(String userName) {
-		
+		AccountService accountService = new AccountService();
 		
 		int input = 0;
 		
 		while(input != 6) {
 			
 			try {
-				System.out.println("\n------------------//------------------");
-				System.out.println("Welcome " + userName);
-				
-				System.out.println("1: Check Inventory");
-				System.out.println("2: Plant");
-				System.out.println("3: Harvest");
-				System.out.println("4: Marketplace");
-				System.out.println("5: Check Farm Status");
-				System.out.println("6: Logout");
-				
-				System.out.print("Input: ");
-				input = Integer.parseInt(scanner.nextLine());
+
+				if(accountService.User(userName).isAdmin() == true) {
+					System.out.println("\n------------------//------------------");
+					System.out.println("Welcome " + userName);
+					
+					System.out.println("1: Check Inventory (Feature coming soon!)");
+					System.out.println("2: Plant (Feature coming soon!)");
+					System.out.println("3: Harvest (Feature coming soon!)");
+					System.out.println("4: Marketplace ");
+					System.out.println("5: Check Farm Status");
+					System.out.println("6: Logout");
+					System.out.println("7: Admin Menu");
+					input = Integer.parseInt(scanner.nextLine());
+					if(input == 7) {
+						signedInAdmin(userName);
+					}
+				}else{
+					System.out.println("\n------------------//------------------");
+					System.out.println("Welcome " + userName);
+
+					System.out.println("1: Check Inventory (Feature coming soon!)");
+					System.out.println("2: Plant (Feature coming soon!)");
+					System.out.println("3: Harvest (Feature coming soon!)");
+					System.out.println("4: Marketplace");
+					System.out.println("5: Check Farm Status");
+					System.out.println("6: Logout");
+					System.out.print("Input: ");
+					input = Integer.parseInt(scanner.nextLine());
+				}
 				
 			}catch(NumberFormatException e) {
 				
@@ -288,15 +310,15 @@ public class Menu {
 					break;
 					
 				case 2:
-					System.out.println("2: Plant");
+					System.out.println("2: Plant (Feature coming soon!)");
 					break;
 					
 				case 3:
-					System.out.println("3: Harvest");
+					System.out.println("3: Harvest (Feature coming soon!)");
 					break;
 					
 				case 4:
-					System.out.println("4: Marketplace");
+					marketMenu(userName);
 					break;
 					
 				case 5:
@@ -304,7 +326,10 @@ public class Menu {
 					farmStatusMenu(userName);
 					signedInOwner(userName);
 					break;
-
+				case 6:
+					menu();
+					break;
+					
 				default:
 					System.out.println("------------------//------------------");
 					System.out.println("Not a vaild input\n");
@@ -328,9 +353,9 @@ public class Menu {
 				System.out.println("\n------------------//------------------");
 				System.out.println("Welcome " + userName);
 				
-				System.out.println("1: Check Inventory");
-				System.out.println("2: Plant");
-				System.out.println("3: Harvest");
+				System.out.println("1: Check Inventory (Feature coming soon!)");
+				System.out.println("2: Plant (Feature coming soon!)");
+				System.out.println("3: Harvest (Feature coming soon!)");
 				System.out.println("4: Marketplace");
 				System.out.println("5: Check Farm Status");
 				System.out.println("6: Logout");
@@ -345,25 +370,21 @@ public class Menu {
 			switch(input){
 				
 				case 1:
-					System.out.println("1: Check Inventory");
+					System.out.println("1: Check Inventory (Feature coming soon!)");
 					
 					break;
 					
 				case 2:
-					System.out.println("2: Plant");
+					System.out.println("2: Plant (Feature coming soon!)");
 					break;
 					
 				case 3:
-					System.out.println("3: Harvest");
+					System.out.println("3: Harvest (Feature coming soon!)");
 					break;
 					
 				case 4:
 					System.out.println("Marketplace");
-					System.out.println("$ " + accountService.User(userName).getUserCurrency());
-					
-					
-					
-					
+					marketMenu(userName);
 					break;
 					
 				case 5:
@@ -562,5 +583,138 @@ public class Menu {
 		
 	}
 	
+	public void marketMenu(String userName) {
+		MarketService marketService = new MarketService();
+		AccountService accountService = new AccountService();
+
+		int input = 0;
+
+		while(input != 3) {
+
+			try {
+				System.out.println("\n----/ Market Options /-----");
+				System.out.println(userName + " Wallet: $ " + accountService.User(userName).getUserCurrency());
+				System.out.println("1: MarketPlace");
+				System.out.println("2: Donate to another Player");
+				System.out.println("3: Leave Market\n");
+				System.out.print("Input: ");
+				input = Integer.parseInt(scanner.nextLine());
+
+			}catch(NumberFormatException e) {
+
+				System.out.println("\nInvaild input...");
+
+			}
+
+			switch(input){
+
+			case 1:
+				System.out.println("\"\n----------/Items For Sale/----------\"");
+				List<Market> marketList = marketService.allMarkets();
+				for(Market mk:marketList) {
+					System.out.println("Market Name: " + mk.getMarketName() + " Item: " + mk.getSeeds() + ""
+							+ " Stock: " + mk.getStock() + " Price: $" + mk.getPrice());
+				}
+				System.out.println("\nWould you like to buy an item? Type \"Yes\" or \"No\" ");
+				System.out.print("Input: ");
+				String choice = scanner.nextLine();
+				if(choice.toLowerCase().trim().equals("yes")) {
+					System.out.println("Type the item in which you would like to purchase");
+					System.out.print("Input: ");
+					choice = scanner.nextLine().toLowerCase().trim();
+					if(marketService.getItem(choice) != null && marketService.getItem(choice).getSeeds() !=null) {
+						if(marketService.getItem(choice).getStock() > 0) {
+							System.out.println("How many " + choice + " would you like to buy?");
+							System.out.print("Input: ");
+							try {
+								input = Integer.parseInt(scanner.nextLine());
+								if(input > 0) {
+									if(marketService.getItem(choice).getStock() - input < 0) {
+										System.out.println("You can not buy more than " +input+ " " + choice + "."
+												+ "\n There is only " +  marketService.getItem(choice).getStock() + " in stock");
+									}else {
+										marketService.updateStock(choice, marketService.getItem(choice).getStock() - input);
+										accountService.updateUserCurrency(userName, accountService.User(userName).getUserCurrency() - input);
+									}
+								}else {
+									System.out.println("Invalid Input...:" + input);
+								}
+								
+							}catch(NumberFormatException e) {
+
+								System.out.println("\nInvaild input...");
+
+							}
+						}else {
+							System.out.println(choice +": Item is out of stock");
+						}
+						
+					}
+					else {
+						System.out.println(choice + ": Item does not exist in marketplace");
+					}
+					
+					
+				}
+				break;
+
+			case 2:
+				donationsMenu(userName);
+				break;
+
+			default:
+				System.out.println("------------------//------------------");
+				System.out.println("Not a vaild input\n");
+				break;
+			}
+
+		}
+	}
+	
+	public void donationsMenu(String userName) {
+		AccountService accountService = new AccountService();
+
+		String input = "";
+
+		while(!input.toLowerCase().trim().equals("exit")) {
+
+			try {
+				System.out.println("\n----/ Market Options /-----");
+				System.out.println(userName + " Wallet: $ " + accountService.User(userName).getUserCurrency());
+				System.out.println("Enter the Player UserName to donate");
+				System.out.println("Type \"Exit\" to return to Market");
+				System.out.print("Input: ");
+				input = scanner.nextLine();
+				int amount = 0;
+				if(accountService.User(input) != null) {
+					System.out.print("Enter amount: $");
+					amount = Integer.parseInt(scanner.nextLine());
+					if(amount > 0) {
+						if(amount <= accountService.User(userName).getUserCurrency()) {
+							accountService.updateUserCurrency(userName, accountService.User(userName).getUserCurrency() - amount);
+							accountService.updateUserCurrency(input, accountService.User(input).getUserCurrency() + amount);
+						}else {
+							System.out.println("You have insufficient funds: "
+									+ "\nYour Current Wallet: $" + accountService.User(userName).getUserCurrency());
+						}
+					}else {
+						System.out.println("Can not enter that amount: " + amount);
+					}
+					
+
+					
+				}else {
+					System.out.println(input + " user does not exist");
+				}
+				
+
+			}catch(NumberFormatException e) {
+
+				System.out.println("\nInvaild input...");
+
+			}
+
+		}
+	}
 
 }

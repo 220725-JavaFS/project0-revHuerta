@@ -10,4 +10,6 @@ public interface MarketDAO {
 
 	void updateStock(String seedName, int stockDecreased);
 
+	Market getItemByName(String item);
+
 }

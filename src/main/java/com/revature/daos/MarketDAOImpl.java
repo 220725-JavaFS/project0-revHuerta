@@ -1,6 +1,7 @@
 package com.revature.daos;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -27,8 +28,8 @@ public class MarketDAOImpl implements MarketDAO {
 				Market market = new Market(
 						result.getString("market_name"),
 						result.getString("seeds"),
-						result.getInt("owner_user"),
-						result.getDouble("farmer_one")
+						result.getInt("stock"),
+						result.getDouble("price")
 						);
 
 				marketList.add(market);
@@ -45,8 +46,41 @@ public class MarketDAOImpl implements MarketDAO {
 
 	@Override
 	public void updateStock(String seedName, int stockDecreased) {
-		// TODO Auto-generated method stub
+		try(Connection connect = ConnectionUtil.getConnection()){
+			String sql = "UPDATE market SET stock = " + "'" + stockDecreased + "'" + "WHERE seeds =" + "'" + seedName + "'" + ";"; 
+			PreparedStatement statement = connect.prepareStatement(sql);
+			statement.execute();
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
 		
+	}
+
+	@Override
+	public Market getItemByName(String item) {
+		try(Connection connect = ConnectionUtil.getConnection()){
+
+			String sql = "SELECT * FROM market WHERE seeds = " +"'" + item + "'" + ";";
+			Statement statement = connect.createStatement();
+			ResultSet result = statement.executeQuery(sql);
+
+			if(result.next()) {
+				Market market = new Market(
+						result.getString("market_name"),
+						result.getString("seeds"),
+						result.getInt("stock"),
+						result.getDouble("price")
+						);
+
+				return market;	
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	

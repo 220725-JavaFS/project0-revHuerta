@@ -23,4 +23,6 @@ public interface AccountDAO {
 	public abstract void unbanUser(String user);
 
 	public abstract double getFarmNetWorth(String farmName);
+
+	public abstract void updateUserCurrency(String userName, double currency);
 }

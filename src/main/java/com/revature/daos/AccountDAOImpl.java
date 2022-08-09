@@ -237,6 +237,19 @@ public class AccountDAOImpl implements AccountDAO {
 
 		return 0;
 	}
+
+	@Override
+	public void updateUserCurrency(String userName, double currency) {
+		try(Connection connect = ConnectionUtil.getConnection()){
+			String sql = "UPDATE account SET user_currency = +" + "'"+ currency + "'" +" WHERE user_name = " + "'" + userName + "'" + ";";
+			PreparedStatement statement = connect.prepareStatement(sql);
+			statement.execute();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 	
 //	public static void main(String[] args) {
 //		AccountService gas = new AccountService();
