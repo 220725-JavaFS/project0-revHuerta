@@ -33,5 +33,17 @@ public class AccountService {
 	public boolean isAdmin(String user) {
 		return accountDao.getIsAdmin(user);
 	}
+	
+	public void banUser(String user) {
+		accountDao.banUser(user);
+	}
+	
+	public void unbanUser(String user) {
+		accountDao.unbanUser(user);
+	}
+	
+	public double netFarmNetWorth(String farmName) {
+		return accountDao.getFarmNetWorth(farmName);
+	}
 
 }

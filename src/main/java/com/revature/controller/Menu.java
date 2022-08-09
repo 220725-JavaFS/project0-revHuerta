@@ -1,6 +1,8 @@
 package com.revature.controller;
 
+import java.util.List;
 import java.util.Scanner;
+
 import com.revature.models.Account;
 import com.revature.models.Farm;
 import com.revature.services.AccountService;
@@ -110,15 +112,21 @@ public class Menu {
 			System.out.println("Password: ");
 			String userPwd= scanner.nextLine();
 			if(accountService.User(userName) != null && accountService.isUserRegistered( userName, userPwd) !=false ){
-					if(accountService.isOwner(userName) == true) {
-						signedInOwner(userName);
-						break;
-					}else if(accountService.isAdmin(userName) == true) {
+				if(accountService.User(userName).isUserBanned() != true){
+					if(accountService.isAdmin(userName) == true) {
 						signedInAdmin(userName);
+						break;
+					}else if(accountService.isOwner(userName) == true) {
+						signedInOwner(userName);
 						break;
 					}
 					signedInUser(userName);
 					break;
+				}else {
+					System.out.println("Your account: " + userName + " is banned");
+					break;
+				}
+				
 			}
 			
 			System.out.println("User or Password was incorrect...");
@@ -134,7 +142,117 @@ public class Menu {
 	}
 	
 	private void signedInAdmin(String userName) {
-		// TODO Auto-generated method stub
+		System.out.println("\n------------------//------------------");
+		System.out.println("Welcome " + userName);
+		
+		int input = 0;
+
+		while(input != 7) {
+			AccountService accountService = new AccountService();
+			List<Account> list = accountService.AllUsers();
+			try {
+				System.out.println("What Would you like to do today?"
+						+ "\n1: List all Account Info"
+						+ "\n2: Search Account Info By User"
+						+ "\n3: Ban a User"
+						+ "\n4: Unban a User"
+						+ "\n5: Check bannned Users"
+						+ "\n6: Play the game "
+						+ "\n7: Logout");
+				System.out.print("Input: ");
+				input = Integer.parseInt(scanner.nextLine());
+
+			}catch(NumberFormatException e) {
+
+			}
+			switch(input){
+			
+			case 1:
+				System.out.println("1: List all Account Info");
+				
+				for(Account a:list) {
+					System.out.println("Name: " + a.getName() +" || LastName: " + a.getLastName() + ""
+							+ " || Email: " + a.getUserEmail() + " || Username: " + a.getUserName() +""
+									+ " || Level: " + a.getUserLevel() + " || Currency: $" + a.getUserCurrency()+ ""
+											+ " || Banned: " + a.isUserBanned() + " || Farm Owner: " + a.isOwner()+""
+													+ " || Admin: " + a.isAdmin());
+				}
+				break;
+				
+			case 2:
+				System.out.println("2: Search Account Info By User");
+				System.out.println("Enter Username: ");
+				String user = scanner.nextLine();
+				if(accountService.User(user) != null) {
+					System.out.println(accountService.User(user));
+					
+				}else {
+					System.out.println(user +" does not exist");
+				}
+				
+				break;
+				
+			case 3:
+				System.out.println("3: Ban a User");
+				System.out.println("Enter Username: ");
+				user = scanner.nextLine();
+				if(accountService.User(user) != null) {
+					//System.out.println(accountService.User(user));
+					if(accountService.User(user).isUserBanned() != true) {
+						accountService.banUser(user);
+						System.out.println(user + " has been banned");
+					}else {
+						System.out.println(user + " is already banned");
+					}
+						
+				}else {
+					System.out.println(user +" does not exist");
+				}
+				break;
+				
+			case 4:
+				System.out.println("4: Unban a User");
+				System.out.println("Enter Username: ");
+				user = scanner.nextLine();
+				if(accountService.User(user) != null) {
+					//System.out.println(accountService.User(user));
+					if(accountService.User(user).isUserBanned() != false) {
+						accountService.unbanUser(user);
+						System.out.println(user + " has been unbanned");
+					}else {
+						System.out.println(user + " is already unbanned");
+					}
+						
+				}else {
+					System.out.println(user +" does not exist");
+				}
+				break;
+				
+			case 5:
+				System.out.println("5: Check bannned Users");
+				
+				for(Account a:list) {
+					if(a.isUserBanned() == true) {
+						System.out.println("Username: " + a.getUserName());
+					}
+				}
+				
+				break;
+				
+			case 6:
+				if(accountService.isOwner(userName) == true) {
+					signedInOwner(userName);
+				}
+				signedInUser(userName);
+				break;
+				
+			default:
+				System.out.println("------------------//------------------");
+				System.out.println("Not a vaild input\n");
+				break;
+		}
+			
+		}
 		
 	}
 
@@ -186,13 +304,7 @@ public class Menu {
 					farmStatusMenu(userName);
 					signedInOwner(userName);
 					break;
-					
-				case 6:
-					System.out.println("6: Logout");
-					menu();
-					break;
-					
-					
+
 				default:
 					System.out.println("------------------//------------------");
 					System.out.println("Not a vaild input\n");
@@ -205,9 +317,105 @@ public class Menu {
 	}
 
 
-	public void signedInUser(String user) {
+	public void signedInUser(String userName) {
+		AccountService accountService = new AccountService();
+		FarmService farmService = new FarmService();
+		int input = 0;
 		
-		System.out.println("Welcome: " + user);
+		while(input != 6) {
+			
+			try {
+				System.out.println("\n------------------//------------------");
+				System.out.println("Welcome " + userName);
+				
+				System.out.println("1: Check Inventory");
+				System.out.println("2: Plant");
+				System.out.println("3: Harvest");
+				System.out.println("4: Marketplace");
+				System.out.println("5: Check Farm Status");
+				System.out.println("6: Logout");
+				
+				System.out.print("Input: ");
+				input = Integer.parseInt(scanner.nextLine());
+				
+			}catch(NumberFormatException e) {
+				
+			}
+			
+			switch(input){
+				
+				case 1:
+					System.out.println("1: Check Inventory");
+					
+					break;
+					
+				case 2:
+					System.out.println("2: Plant");
+					break;
+					
+				case 3:
+					System.out.println("3: Harvest");
+					break;
+					
+				case 4:
+					System.out.println("Marketplace");
+					System.out.println("$ " + accountService.User(userName).getUserCurrency());
+					
+					
+					
+					
+					break;
+					
+				case 5:
+					System.out.println("5: Check Farm Status");
+					if(accountService.User(userName).getFarmName() != null) {
+						farmStatusMenu(userName);
+					}else{
+						System.out.println("Looks like you're not currently in a Farm "
+								+ "\nWould you like to \"Join\" or \"Make\" a new Farm OR (Hit Enter To Return to Menu)");
+						String choice = scanner.nextLine();
+						if(!choice.equals("")) {
+							if(choice.toLowerCase().trim().equals("join")) {
+								//add join
+							}else if(choice.toLowerCase().trim().equals("make")) {
+								Farm farm = new Farm();
+								System.out.println("Enter the farm name:");
+								String farmName = scanner.nextLine();
+								List<Farm> list = farmService.allFarms();
+								boolean flag = false;
+								for(Farm f:list) {
+
+									if(f.getFarmName().equals(farmName)) {
+										flag = true;
+									}
+								}
+								
+								if(flag == false) {
+									farm.setFarmName(farmName);
+									farm.setOwnerUser(userName);
+									
+									farmService.newFarm(farm);
+									System.out.println(userName + " " + farmName + " farm was created");
+								}else{
+									System.out.println(farmName + "name already exist");
+								}
+								
+
+								
+							}
+						}
+					}
+					break;
+
+				default:
+					System.out.println("------------------//------------------");
+					System.out.println("Not a vaild input\n");
+					break;
+			}
+			
+			
+		}
+		
 	}
 	
 	private void farmStatusMenu(String user) {
@@ -223,114 +431,134 @@ public class Menu {
 		System.out.println("Farmer One: " + farm.getFarmerOne());
 		System.out.println("Farmer Two: " + farm.getFarmerTwo());
 		System.out.println("Farmer Three: " + farm.getFarmerThree());
-		
-		System.out.println("\nWould you like to make changes to? Type \"Yes\" or \"No\" " + farm.getFarmName() + "?");
-		System.out.print("Input: ");
-		String input = scanner.nextLine();
-		if(input.toLowerCase().trim().equals("yes")) {
-			int choice = 0;
-			
-			while(choice != 5) {
+		System.out.println("Farm networth(sum of all farmers): " + accountService.netFarmNetWorth(farm.getFarmName()));
+		//Display Current NW, add all user currency and display it to the User
+		if(accountService.User(user).isOwner() == true) {
+			System.out.println("\nWould you like to make changes to? Type \"Yes\" or \"No\" " + farm.getFarmName() + "?");
+			System.out.print("Input: ");
+			String input = scanner.nextLine();
+			if(input.toLowerCase().trim().equals("yes")) {
+				int choice = 0;
 
-				try {
-					System.out.println("------------------//------------------");
-					System.out.println("Which line would you like to make changes to?");
-					System.out.println("\n(1) - Farm Name: " + farm.getFarmName());
-					System.out.println("(2) - Farmer One: " + farm.getFarmerOne());
-					System.out.println("(3) - Farmer Two: " + farm.getFarmerTwo());
-					System.out.println("(4) - Farmer Three: " + farm.getFarmerThree());
-					System.out.println("(5) - Stop making changes: ");
-					
-					System.out.print("Input: ");
-					choice = Integer.parseInt(scanner.nextLine());
-					
-				}catch(NumberFormatException e) {
-					System.out.println("\nNot a valid input...");
+				while(choice != 5) {
+
+					try {
+						System.out.println("------------------//------------------");
+						System.out.println("Which line would you like to make changes to?");
+						System.out.println("\n(1) - Farm Name: " + farm.getFarmName());
+						System.out.println("(2) - Farmer One: " + farm.getFarmerOne());
+						System.out.println("(3) - Farmer Two: " + farm.getFarmerTwo());
+						System.out.println("(4) - Farmer Three: " + farm.getFarmerThree());
+						System.out.println("(5) - Stop making changes: ");
+
+						System.out.print("Input: ");
+						choice = Integer.parseInt(scanner.nextLine());
+
+					}catch(NumberFormatException e) {
+						System.out.println("\nNot a valid input...");
+					}
+
+					switch(choice){
+
+					case 1:
+
+						System.out.println("------------------//------------------");
+						System.out.println("Making Changes to Farm Name...");
+						System.out.println("What would you like your farm name to be?");
+						String newFarmInput = scanner.nextLine(); 
+
+						//Checks the Farm Table in DB, 
+						List<Farm> list = fs.allFarms();
+						boolean flag = false;
+						for(Farm f:list) {
+
+							if(f.getFarmName().equals(newFarmInput)) {
+								flag = true;
+							}
+						}
+						if(flag == false) {
+							fs.updateFarmName(farm.getFarmName(), newFarmInput);
+						}else {
+							System.out.println(newFarmInput + " name is already taken. Please Choose another Farm Name "
+									+ "\nCurrent Taken Farm Names:\n");
+							for(Farm f:list) {
+								System.out.println("Farm Name: " + f.getFarmName());
+							}
+						}
+
+						break;
+
+					case 2:
+						System.out.println("------------------//------------------");
+						System.out.println("Making Changes to Farmer One");
+						System.out.println("Which User would you like to replace farmer one with?");
+						String farmerInput = scanner.nextLine(); 
+
+						Account farmer = accountService.User(farmerInput); 
+
+						if(farmer != null && farmer.getFarmName() == null&& farm.getFarmerTwo() != farmerInput 
+								&& farm.getFarmerThree() != farmerInput){//makes sure the user account exists and 
+							// that the user is not currently in another farm or if the user is already a farmer in the same farm
+							System.out.println("Adding " + farmer.getUserName() + " to farmer one!");
+							fs.updateFarmerOne(farm.getFarmName(), farmerInput);
+
+						}else {
+							System.out.println("That user does not exist...Or that user is Already in your farm...");
+						}
+						break;
+
+					case 3:
+						System.out.println("------------------//------------------");
+						System.out.println("Making Changes to Farmer Two");
+						System.out.println("Which User would you like to replace farmer one with?");
+						farmerInput = scanner.nextLine(); 
+
+						farmer = accountService.User(farmerInput); 
+
+						if(farmer != null && farmer.getFarmName() == null && farm.getFarmerOne() != farmerInput 
+								&& farm.getFarmerThree() != farmerInput){//makes sure the user account exists and 
+							// that the user is not currently in another farm or if the user is already a farmer in the same farm
+							System.out.println("Adding " + farmer.getUserName() + " to farmer two!");
+							fs.updateFarmerTwo(farm.getFarmName(), farmerInput);
+
+						}else {
+							System.out.println("That user does not exist...Or that user is Already in your farm...");
+						}
+						break;
+
+					case 4:
+						System.out.println("------------------//------------------");
+						System.out.println("Making Changes to Farmer Three");
+						System.out.println("Which User would you like to replace farmer one with?");
+						farmerInput = scanner.nextLine(); 
+
+						farmer = accountService.User(farmerInput); 
+
+						if(farmer != null && farmer.getFarmName() == null && farm.getFarmerOne() != farmerInput 
+								&& farm.getFarmerTwo() != farmerInput){//makes sure the user account exists and 
+							// that the user is not currently in another farm or if the user is already a farmer in the same farm
+							System.out.println("Adding " + farmer.getUserName() + " to farmer two!");
+							fs.updateFarmerThree(farm.getFarmName(), farmerInput);
+
+						}else {
+							System.out.println("That user does not exist...Or that user is Already in your farm...");
+						}
+						break;
+
+					case 5:
+
+						break;
+
+					default:
+						System.out.println("------------------//------------------");
+						System.out.println("Not a vaild input\n");
+						break;
+					}
+
 				}
-				
-			switch(choice){
-				
-				case 1:
-					System.out.println("------------------//------------------");
-					System.out.println("Making Changes to Farm Name...");
-					System.out.println("What would you like your farm name to be?");
-					String newFarmInput = scanner.nextLine(); 
-					
-					//add after able to check all farms
-					
-					
-					break;
-					
-				case 2:
-					System.out.println("------------------//------------------");
-					System.out.println("Making Changes to Farmer One");
-					System.out.println("Which User would you like to replace farmer one with?");
-					String farmerInput = scanner.nextLine(); 
-					
-					Account farmer = accountService.User(farmerInput); 
-					
-					if(farmer != null && farmer.getFarmName() == null&& farm.getFarmerTwo() != farmerInput 
-							&& farm.getFarmerThree() != farmerInput){//makes sure the user account exists and 
-						// that the user is not currently in another farm or if the user is already a farmer in the same farm
-						System.out.println("Adding " + farmer.getUserName() + " to farmer one!");
-						fs.updateFarmerOne(farm.getFarmName(), farmerInput);
-						
-					}else {
-						System.out.println("That user does not exist...Or that user is Already in your farm...");
-					}
-					break;
-					
-				case 3:
-					System.out.println("------------------//------------------");
-					System.out.println("Making Changes to Farmer Two");
-					System.out.println("Which User would you like to replace farmer one with?");
-					farmerInput = scanner.nextLine(); 
-					
-					farmer = accountService.User(farmerInput); 
-					
-					if(farmer != null && farmer.getFarmName() == null && farm.getFarmerOne() != farmerInput 
-							&& farm.getFarmerThree() != farmerInput){//makes sure the user account exists and 
-						// that the user is not currently in another farm or if the user is already a farmer in the same farm
-						System.out.println("Adding " + farmer.getUserName() + " to farmer two!");
-						fs.updateFarmerTwo(farm.getFarmName(), farmerInput);
-						
-					}else {
-						System.out.println("That user does not exist...Or that user is Already in your farm...");
-					}
-					break;
-					
-				case 4:
-					System.out.println("------------------//------------------");
-					System.out.println("Making Changes to Farmer Three");
-					System.out.println("Which User would you like to replace farmer one with?");
-					farmerInput = scanner.nextLine(); 
-					
-					farmer = accountService.User(farmerInput); 
-					
-					if(farmer != null && farmer.getFarmName() == null && farm.getFarmerOne() != farmerInput 
-							&& farm.getFarmerTwo() != farmerInput){//makes sure the user account exists and 
-						// that the user is not currently in another farm or if the user is already a farmer in the same farm
-						System.out.println("Adding " + farmer.getUserName() + " to farmer two!");
-						fs.updateFarmerThree(farm.getFarmName(), farmerInput);
-						
-					}else {
-						System.out.println("That user does not exist...Or that user is Already in your farm...");
-					}
-					break;
-					
-				case 5:
-
-					break;
-	
-				default:
-					System.out.println("------------------//------------------");
-					System.out.println("Not a vaild input\n");
-					break;
-			}
-				
 			}
 		}
-		
+
 		
 	}
 	

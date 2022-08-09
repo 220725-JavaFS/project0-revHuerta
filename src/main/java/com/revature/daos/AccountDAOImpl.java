@@ -190,6 +190,53 @@ public class AccountDAOImpl implements AccountDAO {
 		}
 		return false;
 	}
+
+	@Override
+	public void banUser(String user) {
+		try(Connection connect = ConnectionUtil.getConnection()){
+			String sql = "UPDATE account SET is_banned = true WHERE user_name = " + "'" + user + "'" + ";";
+			PreparedStatement statement = connect.prepareStatement(sql);
+			statement.execute();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void unbanUser(String user) {
+		try(Connection connect = ConnectionUtil.getConnection()){
+			String sql = "UPDATE account SET is_banned = false WHERE user_name = " + "'" + user + "'" + ";";
+			PreparedStatement statement = connect.prepareStatement(sql);
+			statement.execute();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	@Override
+	public double getFarmNetWorth(String farmName) {
+		try(Connection connect = ConnectionUtil.getConnection()){
+
+			String sql = "SELECT SUM(user_currency) FROM account WHERE farm_name = " +"'" +farmName + "'" + ";";
+			
+
+			Statement statement = connect.createStatement();
+			ResultSet result = statement.executeQuery(sql);
+			
+			if(result.next()) {
+				return result.getDouble("sum");
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+
+		return 0;
+	}
 	
 //	public static void main(String[] args) {
 //		AccountService gas = new AccountService();
@@ -199,7 +246,7 @@ public class AccountDAOImpl implements AccountDAO {
 //		
 //		List<Account> list = gas.AllUsers();
 //		for(Account b:list) {
-//			System.out.println(b);	
+//			System.out.println(b.getName() + b.getUserCurrency());	
 //		}
 //		
 //		

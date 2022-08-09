@@ -17,4 +17,10 @@ public interface AccountDAO {
 	public abstract boolean getIsOwner(String user);
 
 	public abstract boolean getIsAdmin(String user);
+
+	public abstract void banUser(String user);
+
+	public abstract void unbanUser(String user);
+
+	public abstract double getFarmNetWorth(String farmName);
 }

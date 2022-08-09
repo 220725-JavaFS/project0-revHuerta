@@ -1,5 +1,7 @@
 package com.revature.daos;
 
+import java.util.List;
+
 import com.revature.models.Farm;
 
 public interface FarmDAO {
@@ -13,5 +15,9 @@ public interface FarmDAO {
 	void updateFarmerTwo(String farmName, String farmer);
 	
 	void updateFarmerThree(String farmName, String farmer);
+
+	List<Farm> getAllFarms();
+
+	void storeFarm(Farm user);
 
 }

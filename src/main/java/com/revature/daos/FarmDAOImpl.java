@@ -5,13 +5,56 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
+import java.util.List;
 
+import com.revature.models.Account;
 import com.revature.models.Farm;
 import com.revature.services.FarmService;
 import com.revature.utils.ConnectionUtil;
 
 public class FarmDAOImpl implements FarmDAO{
+	
+	@Override
+	public void storeFarm(Farm user) {
+		try(Connection connect = ConnectionUtil.getConnection()){
 
+			String sql = "INSERT INTO farms(farm_name, farm_level, owner_user, farmer_one,"
+					+ "farmer_two, farmer_three)"
+					+ " VALUES (?, ?, ?, ?, ?, ?)";
+
+			PreparedStatement statement = connect.prepareStatement(sql);
+
+			int count = 0;
+			statement.setString(++count, user.getFarmName());
+			statement.setInt(++count, 0);
+			statement.setString(++count, user.getOwnerUser());
+			statement.setString(++count, null);
+			statement.setString(++count, null);
+			statement.setString(++count, null);
+
+			statement.execute();
+
+			count = 0;
+
+			sql = "UPDATE account SET farm_name = ? WHERE user_name = ?;";
+
+			statement = connect.prepareStatement(sql);
+			statement.setString(++count, user.getFarmName());
+			statement.setString(++count, user.getOwnerUser());
+
+			statement.execute();
+
+			sql = "UPDATE account SET is_owner = true";
+			statement = connect.prepareStatement(sql);
+			statement.execute();
+			
+		}catch(SQLException e) {
+			System.out.println("Unable to Connect to DB...Please Try Again Latter");
+			e.printStackTrace();
+		}
+		
+	}
 	@Override
 	public Farm getFarmByUserName(String userName) {
 		try(Connection connect = ConnectionUtil.getConnection()){
@@ -56,7 +99,7 @@ public class FarmDAOImpl implements FarmDAO{
 			statement.execute();
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		
@@ -74,7 +117,7 @@ public class FarmDAOImpl implements FarmDAO{
 			statement.execute();
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		
@@ -91,7 +134,7 @@ public class FarmDAOImpl implements FarmDAO{
 			statement.execute();
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		
@@ -108,10 +151,42 @@ public class FarmDAOImpl implements FarmDAO{
 			statement.execute();
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		
+	}
+
+	@Override
+	public List<Farm> getAllFarms() {
+		try(Connection connect = ConnectionUtil.getConnection()){
+
+			String sql = "SELECT * FROM farms;";
+			Statement statement = connect.createStatement();
+			ResultSet result = statement.executeQuery(sql);
+
+			List<Farm> farmList = new LinkedList<Farm>();
+
+			while(result.next()) {
+				Farm farm = new Farm(
+						result.getString("farm_name"),
+						result.getInt("farm_level"),
+						result.getString("owner_user"),
+						result.getString("farmer_one"),
+						result.getString("farmer_two"),
+						result.getString("farmer_three")
+						);
+
+				farmList.add(farm);
+			}
+
+			return farmList;
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 //	public static void main(String[] args) {
@@ -123,6 +198,12 @@ public class FarmDAOImpl implements FarmDAO{
 //		}else {
 //			System.out.println("No farms for that user");
 //		}
+//		
+//		List<Farm> a = fs.allFarms();
+//		for(Farm b: a) {
+//			System.out.println(a);
+//		}
+//		
 //		
 //	}
 
