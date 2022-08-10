@@ -627,14 +627,14 @@ public class Menu {
 							System.out.println("How many " + choice + " would you like to buy?");
 							System.out.print("Input: ");
 							try {
-								input = Integer.parseInt(scanner.nextLine());
-								if(input > 0) {
-									if(marketService.getItem(choice).getStock() - input < 0) {
-										System.out.println("You can not buy more than " +input+ " " + choice + "."
+								int input2 = Integer.parseInt(scanner.nextLine());
+								if(input2 > 0) {
+									if(marketService.getItem(choice).getStock() - input2 < 0) {
+										System.out.println("You can not buy more than " +input2+ " " + choice + "."
 												+ "\n There is only " +  marketService.getItem(choice).getStock() + " in stock");
 									}else {
-										marketService.updateStock(choice, marketService.getItem(choice).getStock() - input);
-										accountService.updateUserCurrency(userName, accountService.User(userName).getUserCurrency() - input);
+										marketService.updateStock(choice, marketService.getItem(choice).getStock() - input2);
+										accountService.updateUserCurrency(userName, accountService.User(userName).getUserCurrency() - marketService.getItem(choice).getPrice()*input2);
 									}
 								}else {
 									System.out.println("Invalid Input...:" + input);
